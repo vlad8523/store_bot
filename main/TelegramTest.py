@@ -24,19 +24,7 @@ def check_help(message):
     # bot.register_next_step_handler(message, check)
 
 
-# def check(message):
-#     text = message.text.split()
-#     id_item = int(text[0])
-#     size = ''
-#     if len(text) == 2:
-#         size = text[1]
-#         counts = sheet.check(id_item, size)
-#         text = size.upper() + ' = ' + counts
-#         bot.send_message(message.chat.id, text)
-#     else:
-#         counts = sheet.check(id_item)
-#         text = '\t'.join(counts)
-#         bot.send_message(message.chat.id, text)
+
 
 @bot.message_handler(commands=['help'])
 def check(message):

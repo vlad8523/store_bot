@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="377527d7-3f3d-4abb-a24e-2016ca818e28" name="Default Changelist" comment="" />
+    <list default="true" id="377527d7-3f3d-4abb-a24e-2016ca818e28" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/main/GoogleSheets.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/GoogleSheets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/TelegramTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/TelegramTest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/main.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,30 +22,31 @@
           <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.15" value="1" />
           <entry key="project.open.time.19" value="1" />
-          <entry key="project.opened" value="5" />
+          <entry key="project.open.time.21" value="1" />
+          <entry key="project.opened" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="json" value="1" />
-          <entry key="py" value="9" />
+          <entry key="py" value="10" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="JSON" value="1" />
-          <entry key="Python" value="9" />
+          <entry key="Python" value="10" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="169" />
-          <entry key="py" value="4010" />
+          <entry key="py" value="4485" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="4179" />
+          <entry key="Python" value="4654" />
         </counts>
       </usages-collector>
     </session>
@@ -53,12 +58,21 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/main/main.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="136">
-                  <caret line="8" selection-start-line="8" selection-end-line="8" selection-end-column="37" />
+                <state relative-caret-position="170">
+                  <caret line="10" column="31" lean-forward="true" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
                   <folding>
                     <element signature="e#0#14#0" expanded="true" />
-                    <marker date="1599161391551" expanded="true" signature="2248:2428" ph="..." />
+                    <marker date="1599292779004" expanded="true" signature="2551:2731" ph="..." />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$USER_HOME$/store/Lib/site-packages/telebot/__init__.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="308">
+                  <caret line="1683" column="11" lean-forward="true" selection-start-line="1683" selection-start-column="8" selection-end-line="1683" selection-end-column="11" />
                 </state>
               </provider>
             </entry>
@@ -67,30 +81,30 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/main/GoogleSheets.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="615">
-                  <caret line="53" selection-start-line="53" selection-end-line="53" />
+                <state relative-caret-position="622">
+                  <caret line="50" column="33" selection-start-line="50" selection-start-column="33" selection-end-line="50" selection-end-column="33" />
                   <folding>
                     <element signature="e#0#15#0" expanded="true" />
-                    <marker date="1599071948051" expanded="true" signature="129:914" ph="..." />
-                    <marker date="1599071948051" expanded="true" signature="1267:1878" ph="..." />
+                    <marker date="1599292778919" expanded="true" signature="129:914" ph="..." />
+                    <marker date="1599292778919" expanded="true" signature="1267:1878" ph="..." />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/main/TelegramTest.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="136">
-                  <caret line="8" column="9" lean-forward="true" selection-start-line="8" selection-start-column="9" selection-end-line="8" selection-end-column="9" />
+                <state relative-caret-position="442">
+                  <caret line="26" selection-start-line="26" selection-end-line="26" />
                   <folding>
-                    <marker date="1599159251623" expanded="true" signature="475:1737" ph="..." />
-                    <marker date="1599159251623" expanded="true" signature="1807:1812" ph="..." />
-                    <marker date="1599159251623" expanded="true" signature="2033:2127" ph="..." />
-                    <marker date="1599159251623" expanded="true" signature="2055:2127" ph="..." />
+                    <marker date="1599292778971" expanded="true" signature="475:1307" ph="..." />
+                    <marker date="1599292778971" expanded="true" signature="1377:1382" ph="..." />
+                    <marker date="1599292778971" expanded="true" signature="1603:1697" ph="..." />
+                    <marker date="1599292778971" expanded="true" signature="1625:1697" ph="..." />
                   </folding>
                 </state>
               </provider>
@@ -107,15 +121,18 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/main/modules/GoogleSheets.py" />
         <option value="$PROJECT_DIR$/main/modules/TelegramBot.py" />
-        <option value="$PROJECT_DIR$/main/GoogleSheets.py" />
         <option value="$PROJECT_DIR$/main/TelegramBot.py" />
         <option value="$PROJECT_DIR$/main/TelegramTest.py" />
         <option value="$PROJECT_DIR$/main/main.py" />
+        <option value="$PROJECT_DIR$/main/GoogleSheets.py" />
       </list>
     </option>
   </component>
@@ -137,6 +154,7 @@
       </profile-state>
     </entry>
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -318,7 +336,7 @@
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4978308" visible="true" weight="0.25237092" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4978308" weight="0.25237092" />
       <window_info id="Structure" order="1" sideWeight="0.5021692" side_tool="true" weight="0.25237092" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -338,12 +356,12 @@
     </layout>
     <layout-to-restore>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4978308" visible="true" weight="0.25237092" />
-      <window_info active="true" id="Structure" order="1" sideWeight="0.5021692" side_tool="true" visible="true" weight="0.25237092" />
+      <window_info id="Structure" order="1" sideWeight="0.5021692" side_tool="true" weight="0.25237092" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.329718" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.47396964" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3991323" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.329718" />
@@ -359,17 +377,6 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main/main.py</url>
-          <line>32</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/main/modules/__init__.py" />
     <entry file="file://$PROJECT_DIR$/main/sheets.json">
@@ -378,41 +385,7 @@
     <entry file="file://$PROJECT_DIR$/main/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/main/GoogleSheets.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="53" selection-start-line="53" selection-end-line="53" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-            <marker date="1599071948051" expanded="true" signature="129:914" ph="..." />
-            <marker date="1599071948051" expanded="true" signature="1267:1878" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/TelegramTest.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="9" lean-forward="true" selection-start-line="8" selection-start-column="9" selection-end-line="8" selection-end-column="9" />
-          <folding>
-            <marker date="1599159251623" expanded="true" signature="475:1737" ph="..." />
-            <marker date="1599159251623" expanded="true" signature="1807:1812" ph="..." />
-            <marker date="1599159251623" expanded="true" signature="2033:2127" ph="..." />
-            <marker date="1599159251623" expanded="true" signature="2055:2127" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/TelegramBot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/main/TelegramBot.py" />
     <entry file="file://$USER_HOME$/store/Lib/site-packages/telebot/util.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="986">
@@ -420,13 +393,45 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/main/TelegramTest.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
+          <folding>
+            <marker date="1599292778971" expanded="true" signature="475:1307" ph="..." />
+            <marker date="1599292778971" expanded="true" signature="1377:1382" ph="..." />
+            <marker date="1599292778971" expanded="true" signature="1603:1697" ph="..." />
+            <marker date="1599292778971" expanded="true" signature="1625:1697" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/store/Lib/site-packages/telebot/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="1683" column="11" lean-forward="true" selection-start-line="1683" selection-start-column="8" selection-end-line="1683" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/main/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" selection-start-line="8" selection-end-line="8" selection-end-column="37" />
+        <state relative-caret-position="170">
+          <caret line="10" column="31" lean-forward="true" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
-            <marker date="1599161391551" expanded="true" signature="2248:2428" ph="..." />
+            <marker date="1599292779004" expanded="true" signature="2551:2731" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main/GoogleSheets.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="622">
+          <caret line="50" column="33" selection-start-line="50" selection-start-column="33" selection-end-line="50" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+            <marker date="1599292778919" expanded="true" signature="129:914" ph="..." />
+            <marker date="1599292778919" expanded="true" signature="1267:1878" ph="..." />
           </folding>
         </state>
       </provider>

@@ -47,7 +47,13 @@ class GoogleSheet:
         self.update(self.range_size,self.sizes)
 
     def check(self,id_item,size = ''):
+        """
+        Функция проверки размеров
 
+        :param id_item: ID вещи в таблице
+        :param size: размер вещи, если пусто, то выводит все размеры
+        :return:
+        """
         if size == '':
             if id_item>=len(self.sizes):
                 return 1
