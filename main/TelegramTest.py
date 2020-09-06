@@ -24,7 +24,32 @@ def check_help(message):
     # bot.register_next_step_handler(message, check)
 
 
+@bot.message_handler(commands=['offer'])
+def offer_help(message):
+    bot.send_message(message.chat.id,'offer_help')
+    a = 0
+    bot.register_next_step_handler(message,offer,a)
 
+
+def offer(message,a = 1):
+    a+=1
+    print(a)
+    if message.text == '/end':
+        return None
+    # print(message.text, message.text == '/end')
+    bot.send_message(message.chat.id,'offer')
+    bot.register_next_step_handler(message,offer,a)
+
+
+@bot.message_handler(commands=['test'])
+def test_help(message):
+    print('test_help')
+    bot.register_next_step_handler(message, test)
+
+
+@bot.message_handler(commands=['test1'])
+def test(message):
+    print('test')
 
 @bot.message_handler(commands=['help'])
 def check(message):
@@ -42,7 +67,7 @@ def check(message):
 def send_text(message):
     # bot.send_message(message.chat.id, 'Это из первого ' + message.text)
     # bot.register_next_step_handler(message, second)
-    if message.text == False:
+    if True:
         bot.send_message(message.chat.id,'Напиши /help для команд')
 
 def second(message):

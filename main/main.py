@@ -55,6 +55,10 @@ def offer_help(message):
     bot.send_message(message.chat.id, 'Команда не рабочая')
 
 
+def offer(message):
+    text = message.text
+    data = text.split('\n')
+
 # Вывод подсказки по работе с функцией поступления товаров на склад
 @bot.message_handler(commands=['поступление'])
 def adding_help(message):

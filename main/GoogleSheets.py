@@ -6,9 +6,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 class GoogleSheet:
 
     def __init__(self, token, credentials):
-        CREDENTIALS_FILE = credentials
-
-        self.credentials = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_FILE,
+        self.credentials = ServiceAccountCredentials.from_json_keyfile_name(credentials,
                                                                             [
                                                                                 'https://www.googleapis.com/auth/spreadsheets',
                                                                                 'https://www.googleapis.com/auth/drive'])
