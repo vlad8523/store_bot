@@ -34,19 +34,10 @@ def check_help(message):
 
 # Функция проверки размеров
 def check(message):
-    text = message.text.split()
-    id_item = int(text[0])
-    size = ''
-    if len(text) == 2:
-        size = text[1]
-        counts = sheet.check(id_item, size)
-        text = size.upper() + ' = ' + counts
-        bot.send_message(message.chat.id, text)
-    else:
-        counts = sheet.check(id_item)
-        t = [' = '.join(i) for i in zip(name_sizes, counts)]
-        text = '\n'.join(t)
-        bot.send_message(message.chat.id, text)
+    data = message.text.split()
+    
+    counts = sheet.check(data)
+    
 
 
 # Вывод подсказки по работе с функцией заказа
@@ -55,9 +46,19 @@ def offer_help(message):
     bot.send_message(message.chat.id, 'Команда не рабочая')
 
 
+# Функция оформления заказа
 def offer(message):
     text = message.text
     data = text.split('\n')
+
+    text = sheet.check(data)
+    if type(text) is not int:
+        bot.send_message(message.chat.id,text)
+    else:
+        if text == 1:
+          bot.send_message(message.chat.id,'ID номер не число')
+        elif text == 2:
+          bot.send_message(message.chat.id,'Данной вещи с ID номером не существует')
 
 # Вывод подсказки по работе с функцией поступления товаров на склад
 @bot.message_handler(commands=['поступление'])
@@ -66,12 +67,18 @@ def adding_help(message):
 
 
 # Вывод всех команд
-@bot.message_handler(commands=['help'])
+@bot.message_handler(commands=['help','h'])
 def help(message):
     bot.send_message(message.chat.id, 'Команды для работы с ботом\n'
                                       '/проверка - нужна для проверки количества размеров\n'
                                       '/заказ - для оформления заказа\n'
                                       '/поступление - нужен для добавления размеров в таблицу', reply_markup=keyboard)
+
+
+# Убираем доп. кнопки
+@bot.message_handler(commands=['rm','remove']):
+def remove(message):
+    bot.send_message(message.chat.id,'Доп. кнопки убраны',reply_markup = remove)
 
 
 # Вывод на любой текст подсказки
