@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import httplib2
 import apiclient.discovery
 from oauth2client.service_account import ServiceAccountCredentials
@@ -65,23 +67,6 @@ class GoogleSheet:
 
     # сделать одну функцию с check_size
     def check(self,data):
-        # Проверка на число
-        if data[0].isdigit():
-            id_item = int(data[0])
-        else:
-            return 1
-
-        if len(text) >= 2:
-            size = text[1]
-            text = sheet.check(id_item, data[1:])
-        else:
-            counts = sheet.check(id_item)
-            t = [' = '.join(i) for i in zip(name_sizes, counts)]
-            text = '\n'.join(t)
-        return text
-
-
-    def check_size(self, id_item, sizes=''):
         """
         Функция проверки размеров
 
@@ -89,15 +74,28 @@ class GoogleSheet:
         :param size: размер вещи, если пусто, то выводит все размеры
         :return:
         """
+        # Проверка на число
+        if data[0].isdigit():
+            id_item = int(data[0])
+        else:
+            return 1
+        # Проверка на превышение ID
         if id_item >= len(self.sizes):
                 return 2
-        if size == '':
-            return self.sizes[id_item]
-        else:
-            text = ''
-            for size in sizes:
+
+        if len(data) >= 2:
+            counts = []
+            for size in data[1:]:
                 for i in range(len(self.name_sizes)):
                     if size.lower() == self.name_sizes[i].lower():
-                        text += size.upper()+' = '+self.sizes[id_item][i]+'\n'
+                        counts.append(size.upper()+' = '+self.sizes[id_item][i])
                         break
-            return text
+            # Если не было подходящих размеров из data
+            if len(counts)==0:
+                return 3
+        else:
+            counts = self.sizes[id_item]
+            counts = [' = '.join(i) for i in zip(self.name_sizes, counts)]
+            
+        text = '\n'.join(counts)
+        return text

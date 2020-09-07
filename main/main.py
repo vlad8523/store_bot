@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import telebot
 import GoogleSheets
 
@@ -35,21 +37,6 @@ def check_help(message):
 # Функция проверки размеров
 def check(message):
     data = message.text.split()
-    
-    counts = sheet.check(data)
-    
-
-
-# Вывод подсказки по работе с функцией заказа
-@bot.message_handler(commands=['заказ'])
-def offer_help(message):
-    bot.send_message(message.chat.id, 'Команда не рабочая')
-
-
-# Функция оформления заказа
-def offer(message):
-    text = message.text
-    data = text.split('\n')
 
     text = sheet.check(data)
     if type(text) is not int:
@@ -59,6 +46,31 @@ def offer(message):
           bot.send_message(message.chat.id,'ID номер не число')
         elif text == 2:
           bot.send_message(message.chat.id,'Данной вещи с ID номером не существует')
+
+
+# Вывод подсказки по работе с функцией заказа
+@bot.message_handler(commands=['заказ'])
+def offer_help(message):
+    bot.send_message(message.chat.id, 'Команда не рабочая')
+    return None
+    bot.send_message(message.chat.id,'Введите данные покупателя:')
+    bot.register_next_step_handler(message,)
+
+
+# # 
+# def offer_customer(message):
+#     customer = message.text
+#     bot.register_next_step_handler(message,offer,customer)
+
+
+# # Функция оформления заказа
+# def offer(message,customer,offer = []):
+#     data = message.text.split('\n')
+#     for item in data:
+#         id_item = int(item[0])
+        
+#     bot.register_next_step_handler(message,offer,customer,offer)
+    
 
 # Вывод подсказки по работе с функцией поступления товаров на склад
 @bot.message_handler(commands=['поступление'])
@@ -76,7 +88,7 @@ def help(message):
 
 
 # Убираем доп. кнопки
-@bot.message_handler(commands=['rm','remove']):
+@bot.message_handler(commands=['rm','remove'])
 def remove(message):
     bot.send_message(message.chat.id,'Доп. кнопки убраны',reply_markup = remove)
 
