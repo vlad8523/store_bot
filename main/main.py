@@ -2,6 +2,7 @@
 
 import telebot
 import GoogleSheets
+from OfferService import *
 
 token_telegram = '541338280:AAH846QL0q6ODETecdot3jR6GCFf5pBpaLg'
 token_sheet = '1F_IpnBCt0zwwHm3gkEL3wz6GSLJZ0IV_2-HegqL5bIY'
@@ -9,12 +10,12 @@ new_token_sheet = '1Dj37PyQP2_1lAfGgwDYWs4_If84qbEbikT9QGBXkf8k'
 credentials = 'sheets.json'  # имя файла с закрытым ключом
 # Бот для телеграм
 bot = telebot.TeleBot(token_telegram)
-# Бот для таблицы Google
+# Связь с Google 
 sheet = GoogleSheets.GoogleSheet(new_token_sheet, credentials)
 name_sizes = ['M', 'L', 'XL', '2XL', '3XL', '4XL']
 # создание клавиатуры с кнопками
 keyboard = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
-key_btns = ['/проверка', '/заказ', '/поступление']
+key_btns = ['/проверка', '/заказ', '/поступление', '/обновить таблицу']
 for i in key_btns:
     keyboard.row(i)
 
@@ -51,31 +52,53 @@ def check(message):
 # Вывод подсказки по работе с функцией заказа
 @bot.message_handler(commands=['заказ'])
 def offer_help(message):
-    bot.send_message(message.chat.id, 'Команда не рабочая')
-    return None
+    # bot.send_message(message.chat.id, 'Команда не рабочая')
     bot.send_message(message.chat.id,'Введите данные покупателя:')
-    bot.register_next_step_handler(message,)
+    bot.register_next_step_handler(message,offer_customer)
 
 
-# # 
-# def offer_customer(message):
-#     customer = message.text
-#     bot.register_next_step_handler(message,offer,customer)
+# Запись данных покупателя
+def offer_customer(message):
+    customer = message.text
+    bot.send_message(message.chat.id,'Вводите вещи с ID и перечисляйте размеры с количеством\n'+
+                                    'В конце напишите /end')
+    bot.register_next_step_handler(message,offer,customer)
 
 
-# # Функция оформления заказа
-# def offer(message,customer,offer = []):
-#     data = message.text.split('\n')
-#     for item in data:
-#         id_item = int(item[0])
+# Функция оформления заказа
+def offer(message,customer,offer_list = []):
+    text = message.text
+
+    print(text, text == '/end')
+    if text == '/end':
+        offer_list,non_correct = correct_offer(offer_list)
+        if len(non_correct)>0:
+            bot.send_message(message.chat.id,'Некорректные вещи:\n'+
+                '\n'.join(non_correct))
+            
+
+        print(offer_list)
+        return None
+
+    data = text.split('\n')
+    offer_list+=[item.split() for item in data]
+    # Превращаем 0 элементы каждой вещи в целое число
+    
         
-#     bot.register_next_step_handler(message,offer,customer,offer)
+
+        
+    bot.register_next_step_handler(message,offer,customer,offer_list)
     
 
 # Вывод подсказки по работе с функцией поступления товаров на склад
 @bot.message_handler(commands=['поступление'])
 def adding_help(message):
     bot.send_message(message.chat.id, 'Команда не рабочая')
+
+
+@bot.message_handler(commands = ['обновление'])
+def update_table(message):
+    sheet.get_sizes()
 
 
 # Вывод всех команд
@@ -98,7 +121,8 @@ def remove(message):
 def send_text(message):
     print(message.chat.id)
     if True:
-        bot.send_message(message.chat.id, 'Напиши /help для команд')
+        bot.send_message(message.chat.id, 'Напиши /help для команд',reply_markup = keyboard)
+
 
 
 bot.polling()

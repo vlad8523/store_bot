@@ -17,14 +17,30 @@ class GoogleSheet:
         self.store = ['Закуп', 'Склад', 'Заказы']
         self.token = token
 
+        # self.titles = self.get_titles()
+        
         self.name_sizes = ['M', 'L', 'XL', '2XL', '3XL', '4XL']
         self.range_size = [self.store[0] + '!J7:O35']
         self.get_sizes()
 
 
+    # def offer(self,customer,offer = []):
+    #     failed_items = []
+    #     for item in range(len(offer)):
+    #         
+    #     pass
+
+    def get_titles(self):
+        """
+        Получает названия всех листов таблице
+        """
+        results = self.service.spreadsheets().get(spreadsheetId = self.token).execute()
+        titles = [sheet['properties']['title'] for sheet in results['sheets']]
+        return titles 
+
     def get(self, range):
         """
-        Получает данные с выбранного диапозона и возвращает его
+        Получает данные с выбранного диапазона и возвращает его
 
         """
         results = self.service.spreadsheets().values().batchGet(spreadsheetId=self.token,
@@ -35,7 +51,7 @@ class GoogleSheet:
 
     def update(self, range, values):
         """
-        Обновляет таблицу в выбранном диапозоне
+        Обновляет таблицу в выбранном диапазоне
 
         """
         self.service.spreadsheets().values().batchUpdate(spreadsheetId=self.token,
@@ -60,10 +76,11 @@ class GoogleSheet:
 
     def update_sizes(self):
         """
-        Обновляет таблицу в диапозоне размеров
+        Обновляет таблицу в диапазоне размеров
 
         """
         self.update(self.range_size, self.sizes)
+
 
     # сделать одну функцию с check_size
     def check(self,data):
