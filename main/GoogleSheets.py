@@ -103,10 +103,9 @@ class GoogleSheet:
         if len(data) >= 2:
             counts = []
             for size in data[1:]:
-                for i in range(len(self.name_sizes)):
-                    if size.lower() == self.name_sizes[i].lower():
-                        counts.append(size.upper()+' = '+self.sizes[id_item][i])
-                        break
+                if size.upper() in self.name_sizes:
+                    counts.append(size.upper()+' = '+
+                        self.sizes[id_item][self.name_sizes.index(size.upper())])
             # Если не было подходящих размеров из data
             if len(counts)==0:
                 return 3
@@ -116,3 +115,4 @@ class GoogleSheet:
             
         text = '\n'.join(counts)
         return text
+        

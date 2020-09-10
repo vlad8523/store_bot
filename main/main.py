@@ -15,7 +15,7 @@ sheet = GoogleSheets.GoogleSheet(new_token_sheet, credentials)
 name_sizes = ['M', 'L', 'XL', '2XL', '3XL', '4XL']
 # создание клавиатуры с кнопками
 keyboard = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
-key_btns = ['/проверка', '/заказ', '/поступление', '/обновить таблицу']
+key_btns = ['/проверка', '/заказ', '/поступление', '/обновить_таблицу']
 for i in key_btns:
     keyboard.row(i)
 
@@ -96,7 +96,7 @@ def adding_help(message):
     bot.send_message(message.chat.id, 'Команда не рабочая')
 
 
-@bot.message_handler(commands = ['обновление'])
+@bot.message_handler(commands = ['обновить_таблицу'])
 def update_table(message):
     sheet.get_sizes()
 
