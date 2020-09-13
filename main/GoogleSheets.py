@@ -5,6 +5,7 @@ import apiclient.discovery
 from oauth2client.service_account import ServiceAccountCredentials
 import numpy as np
 
+
 class GoogleSheet:
 
     def __init__(self, token, credentials):
@@ -18,11 +19,10 @@ class GoogleSheet:
         self.token = token
 
         # self.titles = self.get_titles()
-        
+
         self.name_sizes = ['M', 'L', 'XL', '2XL', '3XL', '4XL']
         self.range_size = [self.store[0] + '!J7:O']
         self.get_sizes()
-
 
     # def offer(self,customer,offer = []):
     #     failed_items = []
@@ -34,9 +34,9 @@ class GoogleSheet:
         """
         Получает названия всех листов таблице
         """
-        results = self.service.spreadsheets().get(spreadsheetId = self.token).execute()
+        results = self.service.spreadsheets().get(spreadsheetId=self.token).execute()
         titles = [sheet['properties']['title'] for sheet in results['sheets']]
-        return titles 
+        return titles
 
     def get(self, range):
         """
@@ -47,7 +47,6 @@ class GoogleSheet:
                                                                 ranges=range,
                                                                 valueRenderOption='FORMATTED_VALUE').execute()
         return results
-
 
     def update(self, range, values):
         """
@@ -62,10 +61,6 @@ class GoogleSheet:
                                                                   "majorDimension": "ROWS",
                                                                   "values": values}]
                                                          }).execute()
-    
-
-
-
 
     def get_sizes(self):
         """
@@ -76,7 +71,6 @@ class GoogleSheet:
 
         self.sizes = results['valueRanges'][0]['values']
 
-
     def update_sizes(self):
         """
         Обновляет таблицу в диапазоне размеров
@@ -84,9 +78,8 @@ class GoogleSheet:
         """
         self.update(self.range_size, self.sizes)
 
-
     # сделать одну функцию с check_size
-    def check(self,data):
+    def check(self, data):
         """
         Функция проверки размеров
 
@@ -96,26 +89,25 @@ class GoogleSheet:
         """
         # Проверка на число
         if data[0].isdigit():
-            id_item = int(data[0])-1
+            id_item = int(data[0]) - 1
         else:
             return 1
         # Проверка на превышение ID
         if id_item >= len(self.sizes):
-                return 2
+            return 2
 
         if len(data) >= 2:
             counts = []
             for size in data[1:]:
                 if size.upper() in self.name_sizes:
-                    counts.append(size.upper()+' = '+
-                        self.sizes[id_item][self.name_sizes.index(size.upper())])
+                    counts.append(size.upper() + ' = ' +
+                                  self.sizes[id_item][self.name_sizes.index(size.upper())])
             # Если не было подходящих размеров из data
-            if len(counts)==0:
+            if len(counts) == 0:
                 return 3
         else:
             counts = self.sizes[id_item]
             counts = [' = '.join(i) for i in zip(self.name_sizes, counts)]
-            
+
         text = '\n'.join(counts)
         return text
-        
