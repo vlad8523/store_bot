@@ -16,7 +16,7 @@ results = service.spreadsheets().get(spreadsheetId='1F_IpnBCt0zwwHm3gkEL3wz6GSLJ
 titles = [sheet['properties']['title'] for sheet in results['sheets']]
 pprint(results)
 # print(titles)
-# service.spreadsheets().batchUpdate(spreadsheetId='1F_IpnBCt0zwwHm3gkEL3wz6GSLJZ0IV_2-HegqL5bIY', body={
+# service.spreadshee ts().batchUpdate(spreadsheetId='1F_IpnBCt0zwwHm3gkEL3wz6GSLJZ0IV_2-HegqL5bIY', body={
 #   "requests": [
 #     {
 #       "updateSheetProperties": {

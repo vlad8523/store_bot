@@ -14,13 +14,13 @@ class GoogleSheet:
                                                                                 'https://www.googleapis.com/auth/drive'])
         self.httpAuth = self.credentials.authorize(httplib2.Http())
         self.service = apiclient.discovery.build('sheets', 'v4', http=self.httpAuth)
-        self.store = ['Закуп', 'Склад', 'Заказы']
+        self.store = ['Склад', 'Заказы']
         self.token = token
 
         # self.titles = self.get_titles()
         
         self.name_sizes = ['M', 'L', 'XL', '2XL', '3XL', '4XL']
-        self.range_size = [self.store[0] + '!J7:O35']
+        self.range_size = [self.store[0] + '!J7:O']
         self.get_sizes()
 
 
@@ -93,7 +93,7 @@ class GoogleSheet:
         """
         # Проверка на число
         if data[0].isdigit():
-            id_item = int(data[0])
+            id_item = int(data[0])-1
         else:
             return 1
         # Проверка на превышение ID

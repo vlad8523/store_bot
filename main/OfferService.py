@@ -47,6 +47,5 @@ def correct_offer(offer_list):
 
 	return [offer_list,non_correct_items[::-1]] 
 
-offer_list,non_correct = correct_offer(offer)
 
-pprint(offer_list)
+

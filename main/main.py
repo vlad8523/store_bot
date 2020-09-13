@@ -5,13 +5,13 @@ import GoogleSheets
 from OfferService import *
 
 token_telegram = '541338280:AAH846QL0q6ODETecdot3jR6GCFf5pBpaLg'
-token_sheet = '1F_IpnBCt0zwwHm3gkEL3wz6GSLJZ0IV_2-HegqL5bIY'
+token_sheet = '1x5ZVTBTggSjEHWW4SpW_V9ROsRS8Ik_9zwnMNseVQwc'
 new_token_sheet = '1Dj37PyQP2_1lAfGgwDYWs4_If84qbEbikT9QGBXkf8k'
 credentials = 'sheets.json'  # имя файла с закрытым ключом
 # Бот для телеграм
 bot = telebot.TeleBot(token_telegram)
 # Связь с Google 
-sheet = GoogleSheets.GoogleSheet(new_token_sheet, credentials)
+sheet = GoogleSheets.GoogleSheet(token_sheet, credentials)
 name_sizes = ['M', 'L', 'XL', '2XL', '3XL', '4XL']
 # создание клавиатуры с кнопками
 keyboard = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
@@ -40,6 +40,7 @@ def check(message):
     data = message.text.split()
 
     text = sheet.check(data)
+    print(text)
     if type(text) is not int:
         bot.send_message(message.chat.id,text)
     else:
@@ -47,6 +48,8 @@ def check(message):
           bot.send_message(message.chat.id,'ID номер не число')
         elif text == 2:
           bot.send_message(message.chat.id,'Данной вещи с ID номером не существует')
+        elif text == 3:
+            bot.send_message(message.chat.id,'Нет подходящих размеров')
 
 
 # Вывод подсказки по работе с функцией заказа
