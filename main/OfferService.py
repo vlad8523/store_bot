@@ -1,11 +1,3 @@
-from pprint import pprint
-
-offer_list = [[1, 'l', '2', '2xl', '3'], ['О'], [5, '3xl', '5', 'l', '2'], [9, 'm', '5', 'l', 'xl', '1']]
-
-offer = '1 l 2 2xl 3\nО атвту\n5 3xl 5 l 2\n9 s 5 l 1'.split('\n')
-offer = [item.split() for item in offer]
-
-
 def correct_offer(offer_list):
     name_sizes = ['M', 'L', 'XL', '2XL', '3XL', '4XL']
     size_dict = {size: 0 for size in name_sizes}
