@@ -42,52 +42,56 @@ def check(message):
     text = sheet.check(data)
     print(text)
     if type(text) is not int:
-        bot.send_message(message.chat.id, text)
+        bot.send_message(message.chat.id,text)
     else:
         if text == 1:
-            bot.send_message(message.chat.id, 'ID номер не число')
+          bot.send_message(message.chat.id,'ID номер не число')
         elif text == 2:
-            bot.send_message(message.chat.id, 'Данной вещи с ID номером не существует')
+          bot.send_message(message.chat.id,'Данной вещи с ID номером не существует')
         elif text == 3:
-            bot.send_message(message.chat.id, 'Нет подходящих размеров')
+            bot.send_message(message.chat.id,'Нет подходящих размеров')
 
 
 # Вывод подсказки по работе с функцией заказа
 @bot.message_handler(commands=['заказ'])
 def offer_help(message):
     # bot.send_message(message.chat.id, 'Команда не рабочая')
-    bot.send_message(message.chat.id, 'Введите данные покупателя:')
-    bot.register_next_step_handler(message, offer_customer)
+    bot.send_message(message.chat.id,'Введите данные покупателя:')
+    bot.register_next_step_handler(message,offer_customer)
 
 
 # Запись данных покупателя
 def offer_customer(message):
     customer = message.text
-    bot.send_message(message.chat.id, 'Вводите вещи с ID и перечисляйте размеры с количеством\n' +
-                     'В конце напишите /end')
-    bot.register_next_step_handler(message, offer, customer)
+    bot.send_message(message.chat.id,'Вводите вещи с ID и перечисляйте размеры с количеством\n'+
+                                    'В конце напишите /end')
+    bot.register_next_step_handler(message,offer,customer)
 
 
 # Функция оформления заказа
-def offer(message, customer, offer_list=[]):
+def offer(message,customer,offer_list = []):
     text = message.text
 
     print(text, text == '/end')
     if text == '/end':
-        offer_list, non_correct = correct_offer(offer_list)
-        if len(non_correct) > 0:
-            bot.send_message(message.chat.id, 'Некорректные вещи:\n' +
-                             '\n'.join(non_correct))
+        offer_list,non_correct = correct_offer(offer_list)
+        if len(non_correct)>0:
+            bot.send_message(message.chat.id,'Некорректные вещи:\n'+
+                '\n'.join(non_correct))
+            
 
         print(offer_list)
         return None
 
     data = text.split('\n')
-    offer_list += [item.split() for item in data]
+    offer_list+=[item.split() for item in data]
     # Превращаем 0 элементы каждой вещи в целое число
+    
+        
 
-    bot.register_next_step_handler(message, offer, customer, offer_list)
-
+        
+    bot.register_next_step_handler(message,offer,customer,offer_list)
+    
 
 # Вывод подсказки по работе с функцией поступления товаров на склад
 @bot.message_handler(commands=['поступление'])
@@ -95,13 +99,13 @@ def adding_help(message):
     bot.send_message(message.chat.id, 'Команда не рабочая')
 
 
-@bot.message_handler(commands=['обновить_таблицу'])
+@bot.message_handler(commands = ['обновить_таблицу'])
 def update_table(message):
     sheet.get_sizes()
 
 
 # Вывод всех команд
-@bot.message_handler(commands=['help', 'h'])
+@bot.message_handler(commands=['help','h'])
 def help(message):
     bot.send_message(message.chat.id, 'Команды для работы с ботом\n'
                                       '/проверка - нужна для проверки количества размеров\n'
@@ -110,9 +114,9 @@ def help(message):
 
 
 # Убираем доп. кнопки
-@bot.message_handler(commands=['rm', 'remove'])
+@bot.message_handler(commands=['rm','remove'])
 def remove(message):
-    bot.send_message(message.chat.id, 'Доп. кнопки убраны', reply_markup=remove)
+    bot.send_message(message.chat.id,'Доп. кнопки убраны',reply_markup = remove)
 
 
 # Вывод на любой текст подсказки
@@ -120,7 +124,8 @@ def remove(message):
 def send_text(message):
     print(message.chat.id)
     if True:
-        bot.send_message(message.chat.id, 'Напиши /help для команд', reply_markup=keyboard)
+        bot.send_message(message.chat.id, 'Напиши /help для команд',reply_markup = keyboard)
+
 
 
 bot.polling()
