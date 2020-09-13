@@ -3,7 +3,7 @@
 import httplib2
 import apiclient.discovery
 from oauth2client.service_account import ServiceAccountCredentials
-
+import numpy as np
 
 class GoogleSheet:
 
@@ -63,6 +63,9 @@ class GoogleSheet:
                                                                   "values": values}]
                                                          }).execute()
     
+
+
+
 
     def get_sizes(self):
         """
