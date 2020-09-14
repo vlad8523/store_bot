@@ -37,7 +37,7 @@ def correct_offer(offer_list):
     return [offer_list, non_correct_items[::-1]]
 
 
-def create_offer(customer, offer_list):
+def create_values(customer, offer_list):
     customer_keys = ['number_offer', 'name', 'date', 'delivery', 'phone', 'address']
 
     array = []

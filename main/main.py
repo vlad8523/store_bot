@@ -39,12 +39,12 @@ def check_help(message):
 def check(message):
     data = message.text.split()
 
-    text = sheet.check(data)
-    print(text)
-    if type(text) is not int:
+    sizes = sheet.check(data)
+    if type(sizes) is not int:
+        text = '/n'.join([[' = '.join(i) for i in zip(sizes['name_sizes'], sizes['counts'])]])
         bot.send_message(message.chat.id, text)
     else:
-        if text == 1:
+        if text == 1
             bot.send_message(message.chat.id, 'ID номер не число')
         elif text == 2:
             bot.send_message(message.chat.id, 'Данной вещи с ID номером не существует')

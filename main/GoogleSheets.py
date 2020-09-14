@@ -48,7 +48,7 @@ class GoogleSheet:
                                                                 valueRenderOption='FORMATTED_VALUE').execute()
         return results
 
-    def update(self, range, values):
+    def write(self, range, values):
         """
         Обновляет таблицу в выбранном диапазоне
 
@@ -71,12 +71,12 @@ class GoogleSheet:
 
         self.sizes = results['valueRanges'][0]['values']
 
-    def update_sizes(self):
+    def write_sizes(self):
         """
         Обновляет таблицу в диапазоне размеров
 
         """
-        self.update(self.range_size, self.sizes)
+        self.write(self.range_size, self.sizes)
 
     # сделать одну функцию с check_size
     def check(self, data):
@@ -96,18 +96,26 @@ class GoogleSheet:
         if id_item >= len(self.sizes):
             return 2
 
+        sizes = {
+            'name_sizes': [],
+            'counts': []
+        }
+
         if len(data) >= 2:
             counts = []
             for size in data[1:]:
                 if size.upper() in self.name_sizes:
-                    counts.append(size.upper() + ' = ' +
-                                  self.sizes[id_item][self.name_sizes.index(size.upper())])
-            # Если не было подходящих размеров из data
+                    sizes['name_sizes'].append(size.upper())
+                    sizes['counts'].append(self.sizes[id_item][self.name_sizes.index(size.upper())])
+                    # Если не было подходящих размеров из data
             if len(counts) == 0:
                 return 3
         else:
             counts = self.sizes[id_item]
-            counts = [' = '.join(i) for i in zip(self.name_sizes, counts)]
+            
+            sizes['name_sizes'] = self.name_sizes
+            sizes['counts'] = counts
 
-        text = '\n'.join(counts)
-        return text
+
+        
+        return sizes
