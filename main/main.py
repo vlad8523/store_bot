@@ -3,6 +3,7 @@
 import telebot
 import GoogleSheets
 from OfferService import *
+from pprint import pprint
 
 token_telegram = '541338280:AAH846QL0q6ODETecdot3jR6GCFf5pBpaLg'
 token_sheet = '1x5ZVTBTggSjEHWW4SpW_V9ROsRS8Ik_9zwnMNseVQwc'
@@ -41,14 +42,14 @@ def check(message):
 
     sizes = sheet.check(data)
     if type(sizes) is not int:
-        text = '/n'.join([[' = '.join(i) for i in zip(sizes['name_sizes'], sizes['counts'])]])
+        text = '\n'.join([' = '.join(i) for i in zip(sizes['name_sizes'], sizes['counts'])])
         bot.send_message(message.chat.id, text)
     else:
-        if text == 1
+        if sizes == 1:
             bot.send_message(message.chat.id, 'ID номер не число')
-        elif text == 2:
+        elif sizes == 2:
             bot.send_message(message.chat.id, 'Данной вещи с ID номером не существует')
-        elif text == 3:
+        elif sizes == 3:
             bot.send_message(message.chat.id, 'Нет подходящих размеров')
 
 
@@ -62,31 +63,41 @@ def offer_help(message):
 
 # Запись данных покупателя
 def offer_customer(message):
-    customer = message.text
+    customer = {}
+    customer.update({'number_offer': '',
+                     'name': '',
+                     'date': '',
+                     'delivery': '',
+                     'phone': '',
+                     'address': ''})
+    customer['name'] = message.text
+
     bot.send_message(message.chat.id, 'Вводите вещи с ID и перечисляйте размеры с количеством\n' +
                      'В конце напишите /end')
-    bot.register_next_step_handler(message, offer, customer)
+    bot.register_next_step_handler(message, order, customer,order_list = [])
 
 
 # Функция оформления заказа
-def offer(message, customer, offer_list=[]):
+def order(message, customer, order_list=[]):
     text = message.text
-
-    print(text, text == '/end')
+    pprint(order_list)
     if text == '/end':
-        offer_list, non_correct = correct_offer(offer_list)
+        correct_order_list, non_correct = correct_order(order_list)
         if len(non_correct) > 0:
             bot.send_message(message.chat.id, 'Некорректные вещи:\n' +
                              '\n'.join(non_correct))
 
-        print(offer_list)
+        pprint(correct_order_list)
+        values = create_values(customer, correct_order_list)
+        pprint(values)
+        sheet.write_order(values)
         return None
 
     data = text.split('\n')
-    offer_list += [item.split() for item in data]
+    order_list += [item.split() for item in data]
     # Превращаем 0 элементы каждой вещи в целое число
 
-    bot.register_next_step_handler(message, offer, customer, offer_list)
+    bot.register_next_step_handler(message, order, customer, order_list)
 
 
 # Вывод подсказки по работе с функцией поступления товаров на склад

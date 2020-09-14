@@ -15,20 +15,17 @@ class GoogleSheet:
                                                                                 'https://www.googleapis.com/auth/drive'])
         self.httpAuth = self.credentials.authorize(httplib2.Http())
         self.service = apiclient.discovery.build('sheets', 'v4', http=self.httpAuth)
-        self.store = ['Склад', 'Заказы']
+        self.store = ['Склад', 'МПродажи']
         self.token = token
 
         # self.titles = self.get_titles()
 
         self.name_sizes = ['M', 'L', 'XL', '2XL', '3XL', '4XL']
         self.range_size = [self.store[0] + '!J7:O']
-        self.get_sizes()
+        self.range_orders = [self.store[1] + '!B7:M']
 
-    # def offer(self,customer,offer = []):
-    #     failed_items = []
-    #     for item in range(len(offer)):
-    #         
-    #     pass
+        self.get_sizes()
+        self.get_orders()
 
     def get_titles(self):
         """
@@ -48,6 +45,24 @@ class GoogleSheet:
                                                                 valueRenderOption='FORMATTED_VALUE').execute()
         return results
 
+    def get_sizes(self):
+        """
+        Подгружает размеры из табли Google
+
+        """
+        results = self.get(self.range_size)
+
+        self.sizes = results['valueRanges'][0]['values']
+
+    def get_orders(self):
+        '''
+
+        :return:
+        '''
+        results = self.get(self.range_orders)
+
+        self.orders = results['valueRanges'][0]['values']
+
     def write(self, range, values):
         """
         Обновляет таблицу в выбранном диапазоне
@@ -62,21 +77,20 @@ class GoogleSheet:
                                                                   "values": values}]
                                                          }).execute()
 
-    def get_sizes(self):
-        """
-        Подгружает размеры из табли Google
-
-        """
-        results = self.get(self.range_size)
-
-        self.sizes = results['valueRanges'][0]['values']
-
-    def write_sizes(self):
+    def write_sizes(self, values=''):
         """
         Обновляет таблицу в диапазоне размеров
 
         """
-        self.write(self.range_size, self.sizes)
+        if values == '':
+            self.write(self.range_size, self.sizes)
+        else:
+            self.write(self.range_size, values)
+
+    def write_order(self, values):
+        range = 'МПродажи!B' + str(7 + len(self.orders)) + ':M'
+        self.orders+=values
+        self.write(range, values)
 
     # сделать одну функцию с check_size
     def check(self, data):
@@ -102,20 +116,19 @@ class GoogleSheet:
         }
 
         if len(data) >= 2:
-            counts = []
+
             for size in data[1:]:
+                print(size)
                 if size.upper() in self.name_sizes:
                     sizes['name_sizes'].append(size.upper())
                     sizes['counts'].append(self.sizes[id_item][self.name_sizes.index(size.upper())])
                     # Если не было подходящих размеров из data
-            if len(counts) == 0:
+            if len(sizes['counts']) == 0:
                 return 3
         else:
             counts = self.sizes[id_item]
-            
+
             sizes['name_sizes'] = self.name_sizes
             sizes['counts'] = counts
 
-
-        
         return sizes
