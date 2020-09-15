@@ -5,6 +5,12 @@ import GoogleSheets
 from OfferService import *
 from pprint import pprint
 
+# Пользователи с разрешенным доступом
+known_users = []
+# Пользователи администраторы
+admin_users = []
+
+# Добавить config
 token_telegram = '541338280:AAH846QL0q6ODETecdot3jR6GCFf5pBpaLg'
 token_sheet = '1x5ZVTBTggSjEHWW4SpW_V9ROsRS8Ik_9zwnMNseVQwc'
 new_token_sheet = '1Dj37PyQP2_1lAfGgwDYWs4_If84qbEbikT9QGBXkf8k'
@@ -43,8 +49,10 @@ def check(message):
     sizes = sheet.check(data)
     if type(sizes) is not int:
         text = '\n'.join([' = '.join(i) for i in zip(sizes['name_sizes'], sizes['counts'])])
+        
         bot.send_message(message.chat.id, text)
     else:
+        # Вывод текста ошибки
         if sizes == 1:
             bot.send_message(message.chat.id, 'ID номер не число')
         elif sizes == 2:
@@ -63,40 +71,41 @@ def offer_help(message):
 
 # Запись данных покупателя
 def offer_customer(message):
-    customer = {}
-    customer.update({'number_offer': '',
+    # Словарь для покупателя
+    customer = {{'number_offer': '',
                      'name': '',
                      'date': '',
                      'delivery': '',
                      'phone': '',
-                     'address': ''})
+                     'address': ''}}
+    # Сохранение имени(Временно)                       
     customer['name'] = message.text
 
     bot.send_message(message.chat.id, 'Вводите вещи с ID и перечисляйте размеры с количеством\n' +
                      'В конце напишите /end')
+    # Запуск оформления заказа
     bot.register_next_step_handler(message, order, customer,order_list = [])
 
 
 # Функция оформления заказа
 def order(message, customer, order_list=[]):
     text = message.text
-    pprint(order_list)
+    # pprint(order_list)
     if text == '/end':
         correct_order_list, non_correct = correct_order(order_list)
         if len(non_correct) > 0:
             bot.send_message(message.chat.id, 'Некорректные вещи:\n' +
                              '\n'.join(non_correct))
 
-        pprint(correct_order_list)
+        # pprint(correct_order_list)
         values = create_values(customer, correct_order_list)
-        pprint(values)
+        # pprint(values)
         sheet.write_order(values)
         return None
 
     data = text.split('\n')
     order_list += [item.split() for item in data]
-    # Превращаем 0 элементы каждой вещи в целое число
-
+    # Запуск заново функции с передачей сохраненного листа заказа
     bot.register_next_step_handler(message, order, customer, order_list)
 
 

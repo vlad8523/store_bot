@@ -29,7 +29,7 @@ class GoogleSheet:
 
     def get_titles(self):
         """
-        Получает названия всех листов таблице
+        Получает названия всех листов таблицы
         """
         results = self.service.spreadsheets().get(spreadsheetId=self.token).execute()
         titles = [sheet['properties']['title'] for sheet in results['sheets']]
@@ -47,7 +47,7 @@ class GoogleSheet:
 
     def get_sizes(self):
         """
-        Подгружает размеры из табли Google
+        Подгружает размеры из таблицы Google
 
         """
         results = self.get(self.range_size)
@@ -88,6 +88,10 @@ class GoogleSheet:
             self.write(self.range_size, values)
 
     def write_order(self, values):
+        '''
+        Записывает данные заказа в таблицу продаж
+
+        '''
         range = 'МПродажи!B' + str(7 + len(self.orders)) + ':M'
         self.orders+=values
         self.write(range, values)
