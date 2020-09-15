@@ -2,7 +2,7 @@
 
 import telebot
 import GoogleSheets
-from OfferService import *
+from TransformFunctions import correct_order,create_values
 from pprint import pprint
 
 # Пользователи с разрешенным доступом
@@ -99,8 +99,8 @@ def order(message, customer, order_list=[]):
 
         # pprint(correct_order_list)
         values = create_values(customer, correct_order_list)
-        # pprint(values)
-        sheet.write_order(values)
+        pprint(values)
+        # sheet.write_order(values)
         return None
 
     data = text.split('\n')

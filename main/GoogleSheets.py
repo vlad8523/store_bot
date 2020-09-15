@@ -4,6 +4,9 @@ import httplib2
 import apiclient.discovery
 from oauth2client.service_account import ServiceAccountCredentials
 import numpy as np
+from TransformFunctions import create_storage
+
+# Переместить функ
 
 
 class GoogleSheet:
@@ -23,6 +26,7 @@ class GoogleSheet:
         self.name_sizes = ['M', 'L', 'XL', '2XL', '3XL', '4XL']
         self.range_size = [self.store[0] + '!J7:O']
         self.range_orders = [self.store[1] + '!B7:M']
+        self.range_storage = [self.store[1]+'!B7:O']
 
         self.get_sizes()
         self.get_orders()
@@ -44,6 +48,15 @@ class GoogleSheet:
                                                                 ranges=range,
                                                                 valueRenderOption='FORMATTED_VALUE').execute()
         return results
+
+    def get_storage(self):
+        '''
+        Получает все значения со склада
+
+        '''
+        raw_storage = self.get(self.range_storage)
+
+        storage = correct
 
     def get_sizes(self):
         """
@@ -136,3 +149,4 @@ class GoogleSheet:
             sizes['counts'] = counts
 
         return sizes
+

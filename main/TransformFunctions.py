@@ -67,3 +67,19 @@ def create_values(customer, order_list):
 
     values = customer_values + order_values
     return values
+
+
+def create_storage(raw_data):
+    storage = []
+
+    for row in raw_data:
+        storage.append({
+            'id_item': row[0],
+            'type':row[1],
+            'name': row[2],
+            'color': row[3],
+            'price': row[7],
+            'sizes': row[8:]
+            })
+
+    return storage
