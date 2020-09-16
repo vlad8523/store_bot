@@ -1,14 +1,25 @@
+import storage
+
+name_sizes = ['M', 'L', 'XL', '2XL', '3XL', '4XL']
+
+store = storage.Storage()
+
 def correct_order(order_list):
     '''
     Создает корректный заказ
     Возращает лист с корректным заказом и некорректными элементами
+
+    :param order_list:
+    :return:
     '''
 
 
-    name_sizes = ['M', 'L', 'XL', '2XL', '3XL', '4XL']
+
     size_dict = {size: 0 for size in name_sizes}
 
     non_correct_items = []
+    correct_order_list = []
+
     for i in range(len(order_list))[::-1]:
         # Проверка на id вещи
         # Не сделано проверка на наличие в таблицу!!!
@@ -26,7 +37,6 @@ def correct_order(order_list):
         tmp_failed = []
         tmp_sizes_zip = []
         # Корректный список заказов(хранит в себе все вещи в виде словаря с id, размерами и некорректными размерами)
-        correct_order_list = []
 
         for j in range(len(order_list[i]))[1::2]:
             # Временный размер и количество

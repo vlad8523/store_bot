@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import httplib2
 import apiclient.discovery
+import httplib2
 from oauth2client.service_account import ServiceAccountCredentials
-import numpy as np
-from TransformFunctions import create_storage
 import storage
+
 
 # Переместить функ
 
@@ -19,18 +18,26 @@ class GoogleSheet:
                                                                                 'https://www.googleapis.com/auth/drive'])
         self.httpAuth = self.credentials.authorize(httplib2.Http())
         self.service = apiclient.discovery.build('sheets', 'v4', http=self.httpAuth)
-        self.store = ['Склад', 'МПродажи']
+        self.store_titles = ['Склад', 'МПродажи']
         self.token = token
 
         # self.titles = self.get_titles()
 
-        self.name_sizes = ['M', 'L', 'XL', '2XL', '3XL', '4XL']
-        self.range_size = [self.store[0] + '!J7:O']
-        self.range_orders = [self.store[1] + '!B7:M']
-        self.range_storage = [self.store[1]+'!B7:O']
+        self.name_sizes = ['M', 'L', 'XL', '2X"L', '3XL', '4XL']
+        self.range_orders = [self.store_titles[1] + '!B7:M']
+        self.range_store = [self.store_titles[0] + '!B7:O']
+        self.range_storage = [self.range_store,self.range_orders]
 
-        self.get_sizes()
-        self.get_orders()
+        self.storage = storage.Storage()
+
+        storage_lists = self.get_storage()
+
+        self.storage.set_storage(storage_lists[0]['values'])
+        self.storage.set_sizes()
+
+        self.storage.set_order(storage_lists[1]['values'])
+
+
 
     def get_titles(self):
         """
@@ -51,31 +58,29 @@ class GoogleSheet:
         return results
 
     def get_storage(self):
+        results = self.service.spreadsheets().values().get(spreadsheetId=self.token,
+                                                                ranges=self.range_storage,
+                                                                valueRenderOption='FORMATTED_VALUE').execute()
+
+        return results['valueRanges']
+
+    def get_store(self):
         '''
         Получает все значения со склада
 
         '''
-        raw_storage = self.get(self.range_storage)
+        raw_storage = self.get(self.range_store)
 
-        storage = correct
-
-    def get_sizes(self):
-        """
-        Подгружает размеры из таблицы Google
-
-        """
-        results = self.get(self.range_size)
-
-        self.sizes = results['valueRanges'][0]['values']
+        return raw_storage['valueRanges'][0]['values']
 
     def get_orders(self):
         '''
-
+        Получает все значения заказов
         :return:
         '''
         results = self.get(self.range_orders)
 
-        self.orders = results['valueRanges'][0]['values']
+        return results['valueRanges'][0]['values']
 
     def write(self, range, values):
         """
@@ -91,7 +96,7 @@ class GoogleSheet:
                                                                   "values": values}]
                                                          }).execute()
 
-    def write_sizes(self, values=''):
+    def update_sizes(self, values=''):
         """
         Обновляет таблицу в диапазоне размеров
 
@@ -103,51 +108,21 @@ class GoogleSheet:
 
     def write_order(self, values):
         '''
-        Записывает данные заказа в таблицу продаж
+        Записывает данные заказа в таблицу
 
         '''
-        range = 'МПродажи!B' + str(7 + len(self.orders)) + ':M'
-        self.orders+=values
-        self.write(range, values)
 
-    # сделать одну функцию с check_size
-    def check(self, data):
-        """
-        Функция проверки размеров
+        # range = 'МПродажи!B' + str(7 + len(self.orders)) + ':M'
+        # self.orders += values
+        #
+        # self.service.spreadsheets().values().batchUpdate(spreadsheetId=self.token,
+        #                                                  body={
+        #                                                      "valueInputOption": "USER_ENTERED",
+        #                                                      "data": [
+        #                                                          {"range": range,
+        #                                                           "majorDimension": "ROWS",
+        #                                                           "values": values}]
+        #                                                  }).execute()
 
-        :param id_item: ID вещи в таблице
-        :param size: размер вещи, если пусто, то выводит все размеры
-        :return:
-        """
-        # Проверка на число
-        if data[0].isdigit():
-            id_item = int(data[0]) - 1
-        else:
-            return 1
-        # Проверка на превышение ID
-        if id_item >= len(self.sizes):
-            return 2
-
-        sizes = {
-            'name_sizes': [],
-            'counts': []
-        }
-
-        if len(data) >= 2:
-
-            for size in data[1:]:
-                print(size)
-                if size.upper() in self.name_sizes:
-                    sizes['name_sizes'].append(size.upper())
-                    sizes['counts'].append(self.sizes[id_item][self.name_sizes.index(size.upper())])
-                    # Если не было подходящих размеров из data
-            if len(sizes['counts']) == 0:
-                return 3
-        else:
-            counts = self.sizes[id_item]
-
-            sizes['name_sizes'] = self.name_sizes
-            sizes['counts'] = counts
-
-        return sizes
-
+    def update_orders(self, values):
+        return None

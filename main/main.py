@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import telebot
-import GoogleSheets
-from TransformFunctions import correct_order,create_values
+import google_sheets
+from transform_functions import correct_order
 from pprint import pprint
+import storage
+import templates
 
 # Пользователи с разрешенным доступом
 known_users = []
@@ -18,8 +20,10 @@ credentials = 'sheets.json'  # имя файла с закрытым ключо�
 # Бот для телеграм
 bot = telebot.TeleBot(token_telegram)
 # Связь с Google 
-sheet = GoogleSheets.GoogleSheet(token_sheet, credentials)
-name_sizes = ['M', 'L', 'XL', '2XL', '3XL', '4XL']
+sheet = google_sheets.GoogleSheet(token_sheet, credentials)
+# Хранение данных из таблицы
+store = storage.Storage()
+
 # создание клавиатуры с кнопками
 keyboard = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
 key_btns = ['/проверка', '/заказ', '/поступление', '/обновить_таблицу']
@@ -45,19 +49,19 @@ def check_help(message):
 # Функция проверки размеров
 def check(message):
     data = message.text.split()
+    sizes = store.get_sizes(data)
 
-    sizes = sheet.check(data)
-    if type(sizes) is not int:
+    if sizes['error_code'] == 0:
         text = '\n'.join([' = '.join(i) for i in zip(sizes['name_sizes'], sizes['counts'])])
-        
+
         bot.send_message(message.chat.id, text)
     else:
         # Вывод текста ошибки
-        if sizes == 1:
+        if sizes['error_code'] == 1:
             bot.send_message(message.chat.id, 'ID номер не число')
-        elif sizes == 2:
+        elif sizes['error_code'] == 2:
             bot.send_message(message.chat.id, 'Данной вещи с ID номером не существует')
-        elif sizes == 3:
+        elif sizes['error_code'] == 3:
             bot.send_message(message.chat.id, 'Нет подходящих размеров')
 
 
@@ -66,25 +70,20 @@ def check(message):
 def offer_help(message):
     # bot.send_message(message.chat.id, 'Команда не рабочая')
     bot.send_message(message.chat.id, 'Введите данные покупателя:')
-    bot.register_next_step_handler(message, offer_customer)
+    bot.register_next_step_handler(message, order_customer)
 
 
 # Запись данных покупателя
-def offer_customer(message):
+def order_customer(message):
     # Словарь для покупателя
-    customer = {{'number_offer': '',
-                     'name': '',
-                     'date': '',
-                     'delivery': '',
-                     'phone': '',
-                     'address': ''}}
+    customer = templates.customer.copy()
     # Сохранение имени(Временно)                       
     customer['name'] = message.text
 
     bot.send_message(message.chat.id, 'Вводите вещи с ID и перечисляйте размеры с количеством\n' +
                      'В конце напишите /end')
     # Запуск оформления заказа
-    bot.register_next_step_handler(message, order, customer,order_list = [])
+    bot.register_next_step_handler(message, order, customer, order_list=[])
 
 
 # Функция оформления заказа
@@ -98,15 +97,15 @@ def order(message, customer, order_list=[]):
                              '\n'.join(non_correct))
 
         # pprint(correct_order_list)
-        values = create_values(customer, correct_order_list)
-        pprint(values)
+
+        values = storage.create_order
         # sheet.write_order(values)
         return None
 
     data = text.split('\n')
     order_list += [item.split() for item in data]
     # Запуск заново функции с передачей сохраненного листа заказа
-    bot.register_next_step_handler(message, order, customer, order_list)
+    bot.register_next_step_handler(message, order, customer=customer, order_list=order_list)
 
 
 # Вывод подсказки по работе с функцией поступления товаров на склад
@@ -117,7 +116,8 @@ def adding_help(message):
 
 @bot.message_handler(commands=['обновить_таблицу'])
 def update_table(message):
-    sheet.get_sizes()
+    bot.send_message(message.chat.id, 'Пока не работает')
+    # sheet.get_sizes()
 
 
 # Вывод всех команд
