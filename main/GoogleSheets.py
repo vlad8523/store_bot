@@ -5,6 +5,7 @@ import apiclient.discovery
 from oauth2client.service_account import ServiceAccountCredentials
 import numpy as np
 from TransformFunctions import create_storage
+import storage
 
 # Переместить функ
 

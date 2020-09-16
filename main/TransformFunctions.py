@@ -1,20 +1,22 @@
 def correct_order(order_list):
-	'''
-	Создает корректный заказ
-	Возращает лист с корректным заказом и некорректными элементами
-	'''
+    '''
+    Создает корректный заказ
+    Возращает лист с корректным заказом и некорректными элементами
+    '''
+
+
     name_sizes = ['M', 'L', 'XL', '2XL', '3XL', '4XL']
     size_dict = {size: 0 for size in name_sizes}
 
     non_correct_items = []
     for i in range(len(order_list))[::-1]:
-    	# Проверка на id вещи
-    	# Не сделано проверка на наличие в таблицу!!!
+        # Проверка на id вещи
+        # Не сделано проверка на наличие в таблицу!!!
         if order_list[i][0].isdigit():
             order_list[i] = [int(order_list[i][0])] + order_list[i][1:]
             # Проверка на вид заказа id,(размер,количество)*
             if len(order_list[i]) % 2 != 1:
-            	non_correct_items.append(order_list.pop(i))
+                non_correct_items.append(order_list.pop(i))
         else:
             non_correct_items.append(order_list.pop(i))
 
@@ -27,7 +29,7 @@ def correct_order(order_list):
         correct_order_list = []
 
         for j in range(len(order_list[i]))[1::2]:
-        	# Временный размер и количество
+            # Временный размер и количество
             tmp_size = order_list[i][j].upper()
             tmp_count = order_list[i][j + 1]
 
@@ -49,17 +51,18 @@ def correct_order(order_list):
 
     return [correct_order_list, non_correct_items[::-1]]
 
+
 # Создает значение для вставки в таблицу
 # Не все элементы пока вставляются!!!
 def create_values(customer, order_list):
-	# Ключи для словаря покупателя
+    # Ключи для словаря покупателя
     customer_keys = ['number_offer', 'name', 'date', 'delivery', 'phone', 'address']
 
     # order_values хранит в себе значения всех купленных вещей для вставки 
     order_values = []
     # Хранит в себе значения покупателя для вставки
     customer_values = [[customer[key] for key in customer_keys] + [''] * 6]
-    
+
     for item in order_list:
         for size in item['sizes']:
             ls = ([''] * 6) + [''] + [item['id_item']] + [''] + size + ['']
@@ -75,11 +78,11 @@ def create_storage(raw_data):
     for row in raw_data:
         storage.append({
             'id_item': row[0],
-            'type':row[1],
+            'type': row[1],
             'name': row[2],
             'color': row[3],
             'price': row[7],
             'sizes': row[8:]
-            })
+        })
 
     return storage
