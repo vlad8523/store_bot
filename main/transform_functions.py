@@ -1,10 +1,7 @@
-import storage
-
 name_sizes = ['M', 'L', 'XL', '2XL', '3XL', '4XL']
 
-store = storage.Storage()
 
-def correct_order(order_list):
+def correct_order(store, order_list):
     '''
     Создает корректный заказ
     Возращает лист с корректным заказом и некорректными элементами
@@ -12,8 +9,6 @@ def correct_order(order_list):
     :param order_list:
     :return:
     '''
-
-
 
     size_dict = {size: 0 for size in name_sizes}
 
@@ -24,39 +19,53 @@ def correct_order(order_list):
         # Проверка на id вещи
         # Не сделано проверка на наличие в таблицу!!!
         if order_list[i][0].isdigit():
-            order_list[i] = [int(order_list[i][0])] + order_list[i][1:]
+            tmp_id = int(order_list[i][0])
+
+            order_list[i] = [tmp_id] + order_list[i][1:]
             # Проверка на вид заказа id,(размер,количество)*
+
             if len(order_list[i]) % 2 != 1:
                 non_correct_items.append(order_list.pop(i))
+
+            current_counts = store.get_sizes([str(tmp_id)])
+
+            if current_counts['error_code'] != 0:
+                non_correct_items.append(order_list.pop(i))
+
         else:
             non_correct_items.append(order_list.pop(i))
+
+    correct_counts_fun = lambda x,y: int(x)<=int(y)
 
     for i in range(len(order_list)):
         # Временный id, некорректные размеры и лист для размеров вида [[size,counts],...,[size,counts]]
         tmp_id = order_list[i][0]
-        tmp_failed = []
-        tmp_sizes_zip = []
+
+        tmp_sizes_zip = [[size.upper(), counts] for size, counts in zip(order_list[i][1::2], order_list[i][2::2]) if
+                         (size.upper() in name_sizes) and (counts.isdigit())]
+        tmp_failed = [size.upper() for size, counts in zip(order_list[i][1::2], order_list[i][2::2]) if
+                      (size.upper() not in name_sizes) or (not counts.isdigit())]
+        tmp_sizes = [size for size, counts in tmp_sizes_zip]
+        tmp_counts = [counts for size, counts in tmp_sizes_zip]
+
+        tmp_not_enough = []
+        data = [str(tmp_id)]+tmp_sizes
+
+        curr_counts = store.get_sizes(data)['counts']
+
+        cond_counts = [correct_counts_fun(x,y) for x,y in zip(tmp_counts,curr_counts)]
+
+        for j in range(len(tmp_sizes_zip))[::-1]:
+            if not cond_counts[j]:
+                del tmp_sizes_zip[j]
+                tmp_not_enough.append(tmp_sizes.pop(j))
         # Корректный список заказов(хранит в себе все вещи в виде словаря с id, размерами и некорректными размерами)
-
-        for j in range(len(order_list[i]))[1::2]:
-            # Временный размер и количество
-            tmp_size = order_list[i][j].upper()
-            tmp_count = order_list[i][j + 1]
-
-            if tmp_size in name_sizes:
-                if tmp_count.isdigit():
-                    tmp_sizes_zip.append([tmp_size, tmp_count])
-                else:
-                    tmp_failed.append(tmp_size)
-                    continue
-            else:
-                tmp_failed.append(tmp_size)
-                continue
 
         correct_order_list.append({
             'id_item': tmp_id,
             'sizes': tmp_sizes_zip,
-            'failed': tmp_failed
+            'failed': tmp_failed,
+            'not_enough': tmp_not_enough
         })
 
     return [correct_order_list, non_correct_items[::-1]]

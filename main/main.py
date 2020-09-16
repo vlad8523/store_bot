@@ -21,6 +21,7 @@ credentials = 'sheets.json'  # имя файла с закрытым ключо�
 bot = telebot.TeleBot(token_telegram)
 # Связь с Google 
 sheet = google_sheets.GoogleSheet(token_sheet, credentials)
+sheet.set_store()
 # Хранение данных из таблицы
 store = storage.Storage()
 
@@ -91,14 +92,19 @@ def order(message, customer, order_list=[]):
     text = message.text
     # pprint(order_list)
     if text == '/end':
-        correct_order_list, non_correct = correct_order(order_list)
+        correct_order_list, non_correct = correct_order(store,order_list)
         if len(non_correct) > 0:
             bot.send_message(message.chat.id, 'Некорректные вещи:\n' +
                              '\n'.join(non_correct))
+        bot.send_message(message.chat.id,'Недостаточное количество')
+        for item in correct_order_list:
+            if len(item['not_enough'])>0:
+                print(str(item['id_item'])+' '+' '.join(item['not_enough']))
+                bot.send_message(message.chat.id,str(item['id_item'])+' '+' '.join(item['not_enough']))
 
         # pprint(correct_order_list)
 
-        values = storage.create_order
+        values = store.create_order(customer,order_list)
         # sheet.write_order(values)
         return None
 

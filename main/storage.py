@@ -4,6 +4,7 @@ import templates
 
 # Хранит в себе все значения из таблицыБ и производит манипуляции с данными
 class Storage:
+
     ___shared_state = {}
 
     sizes_list = []
@@ -36,6 +37,7 @@ class Storage:
     def get_sizes(self, data=''):
 
         sizes = templates.sizes.copy()
+
         if data == '':
             sizes['counts'] = self.sizes_list
             return sizes
@@ -46,7 +48,7 @@ class Storage:
         else:
             sizes['error_code'] = 1
             return sizes
-        # Проверка на превышение ID
+        # Проверка ID
         if id_item >= len(self.sizes_list) or id_item < 0:
             sizes['error_code'] = 2
             return sizes
@@ -59,6 +61,8 @@ class Storage:
                     sizes['name_sizes'].append(size.upper())
                     sizes['counts'].append(self.sizes_list[id_item][self.name_sizes.index(size.upper())])
                     # Если не было подходящих размеров из data
+                else:
+                    sizes['failed'].append(size)
             if len(sizes['counts']) == 0:
                 sizes['error_code'] = 3
                 return sizes
@@ -70,5 +74,8 @@ class Storage:
 
         return sizes
 
-    def create_order(self,customer,order_list):
+    def get_order_list(self):
+        return self.order_list
+
+    def create_order(self, customer, order_list):
         values = create_values(customer, order_list)

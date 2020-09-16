@@ -6,38 +6,27 @@ from oauth2client.service_account import ServiceAccountCredentials
 import storage
 
 
-# Переместить функ
-
-
 class GoogleSheet:
+    store = storage.Storage()
+    store_titles = ['Склад', 'МПродажи']
+
+    range_storage = store_titles[0] + '!B7:O'
+    range_sizes = store_titles[0] + '!J7:O'
+    range_orders = store_titles[1] + '!B7:M'
+    range_store = [range_storage, range_orders]
 
     def __init__(self, token, credentials):
         self.credentials = ServiceAccountCredentials.from_json_keyfile_name(credentials,
                                                                             [
                                                                                 'https://www.googleapis.com/auth/spreadsheets',
                                                                                 'https://www.googleapis.com/auth/drive'])
+
         self.httpAuth = self.credentials.authorize(httplib2.Http())
         self.service = apiclient.discovery.build('sheets', 'v4', http=self.httpAuth)
-        self.store_titles = ['Склад', 'МПродажи']
+
         self.token = token
 
         # self.titles = self.get_titles()
-
-        self.name_sizes = ['M', 'L', 'XL', '2X"L', '3XL', '4XL']
-        self.range_orders = [self.store_titles[1] + '!B7:M']
-        self.range_store = [self.store_titles[0] + '!B7:O']
-        self.range_storage = [self.range_store,self.range_orders]
-
-        self.storage = storage.Storage()
-
-        storage_lists = self.get_storage()
-
-        self.storage.set_storage(storage_lists[0]['values'])
-        self.storage.set_sizes()
-
-        self.storage.set_order(storage_lists[1]['values'])
-
-
 
     def get_titles(self):
         """
@@ -55,34 +44,31 @@ class GoogleSheet:
         results = self.service.spreadsheets().values().batchGet(spreadsheetId=self.token,
                                                                 ranges=range,
                                                                 valueRenderOption='FORMATTED_VALUE').execute()
-        return results
-
-    def get_storage(self):
-        results = self.service.spreadsheets().values().get(spreadsheetId=self.token,
-                                                                ranges=self.range_storage,
-                                                                valueRenderOption='FORMATTED_VALUE').execute()
-
         return results['valueRanges']
 
     def get_store(self):
+        results = self.get(self.range_store)
+        return results
+
+    def get_storage(self):
         '''
         Получает все значения со склада
 
         '''
-        raw_storage = self.get(self.range_store)
+        raw_storage = self.get([self.range_storage])[0]['values']
 
-        return raw_storage['valueRanges'][0]['values']
+        return raw_storage
 
     def get_orders(self):
         '''
         Получает все значения заказов
         :return:
         '''
-        results = self.get(self.range_orders)
+        results = self.get([self.range_orders])[0]['values']
 
-        return results['valueRanges'][0]['values']
+        return results
 
-    def write(self, range, values):
+    def write(self, data):
         """
         Обновляет таблицу в выбранном диапазоне
 
@@ -90,39 +76,49 @@ class GoogleSheet:
         self.service.spreadsheets().values().batchUpdate(spreadsheetId=self.token,
                                                          body={
                                                              "valueInputOption": "USER_ENTERED",
-                                                             "data": [
-                                                                 {"range": range,
-                                                                  "majorDimension": "ROWS",
-                                                                  "values": values}]
+                                                             "data": data
                                                          }).execute()
 
-    def update_sizes(self, values=''):
+    def write_sizes(self, values=''):
         """
         Обновляет таблицу в диапазоне размеров
 
         """
-        if values == '':
-            self.write(self.range_size, self.sizes)
-        else:
-            self.write(self.range_size, values)
+        data = [
+            {"range": self.range_sizes,
+             "majorDimensions": "ROWS",
+             "values": values
+             }]
 
-    def write_order(self, values):
+        self.write(data=data)
+
+    def write_order(self, sizes, order_list):
         '''
         Записывает данные заказа в таблицу
 
         '''
+        range_order_list = 'МПродажи!B' + str(7 + len(self.store.get_order_list())) + ':M'
 
-        # range = 'МПродажи!B' + str(7 + len(self.orders)) + ':M'
-        # self.orders += values
-        #
-        # self.service.spreadsheets().values().batchUpdate(spreadsheetId=self.token,
-        #                                                  body={
-        #                                                      "valueInputOption": "USER_ENTERED",
-        #                                                      "data": [
-        #                                                          {"range": range,
-        #                                                           "majorDimension": "ROWS",
-        #                                                           "values": values}]
-        #                                                  }).execute()
+        data = [
+            {
+                "range": self.range_sizes,
+                "majorDimension": "ROWS",
+                "values": sizes
+            },
+            {
+                "range": range_order_list,
+                "majorDimension": "ROWS",
+                "values": order_list
+            }]
+
+        self.write(data)
 
     def update_orders(self, values):
         return None
+
+    def set_store(self):
+        storage_lists = self.get_store()
+
+        self.store.set_storage(storage_lists[0]['values'])
+        self.store.set_sizes()
+        self.store.set_order(storage_lists[1]['values'])
