@@ -10,10 +10,8 @@ def correct_order(store, order_list):
     :return:
     '''
 
-    size_dict = {size: 0 for size in name_sizes}
-
     non_correct_items = []
-    correct_order_list = []
+    correct_order = []
 
     for i in range(len(order_list))[::-1]:
         # Проверка на id вещи
@@ -27,7 +25,9 @@ def correct_order(store, order_list):
             if len(order_list[i]) % 2 != 1:
                 non_correct_items.append(order_list.pop(i))
 
-            current_counts = store.get_sizes([str(tmp_id)])
+            data = [str(tmp_id)]
+
+            current_counts = store.get_sizes(data)
 
             if current_counts['error_code'] != 0:
                 non_correct_items.append(order_list.pop(i))
@@ -49,7 +49,7 @@ def correct_order(store, order_list):
         tmp_counts = [counts for size, counts in tmp_sizes_zip]
 
         tmp_not_enough = []
-        data = [str(tmp_id)]+tmp_sizes
+        data = [tmp_id]+tmp_sizes
 
         curr_counts = store.get_sizes(data)['counts']
 
@@ -61,19 +61,19 @@ def correct_order(store, order_list):
                 tmp_not_enough.append(tmp_sizes.pop(j))
         # Корректный список заказов(хранит в себе все вещи в виде словаря с id, размерами и некорректными размерами)
 
-        correct_order_list.append({
+        correct_order.append({
             'id_item': tmp_id,
             'sizes': tmp_sizes_zip,
             'failed': tmp_failed,
             'not_enough': tmp_not_enough
         })
 
-    return [correct_order_list, non_correct_items[::-1]]
+    return [correct_order, non_correct_items[::-1]]
 
 
 # Создает значение для вставки в таблицу
 # Не все элементы пока вставляются!!!
-def create_values(customer, order_list):
+def create_values_order(customer, order):
     # Ключи для словаря покупателя
     customer_keys = ['number_offer', 'name', 'date', 'delivery', 'phone', 'address']
 
@@ -82,7 +82,7 @@ def create_values(customer, order_list):
     # Хранит в себе значения покупателя для вставки
     customer_values = [[customer[key] for key in customer_keys] + [''] * 6]
 
-    for item in order_list:
+    for item in order:
         for size in item['sizes']:
             ls = ([''] * 6) + [''] + [item['id_item']] + [''] + size + ['']
             order_values.append(ls)
@@ -92,7 +92,7 @@ def create_values(customer, order_list):
 
 
 def create_storage(raw_data):
-    storage = []
+    storage = [[]]
 
     for row in raw_data:
         storage.append({

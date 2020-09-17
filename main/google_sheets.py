@@ -92,23 +92,23 @@ class GoogleSheet:
 
         self.write(data=data)
 
-    def write_order(self, sizes, order_list):
+    def write_order(self, values_sizes, values_order):
         '''
         Записывает данные заказа в таблицу
 
         '''
-        range_order_list = 'МПродажи!B' + str(7 + len(self.store.get_order_list())) + ':M'
+        range_order = 'МПродажи!B' + str(7 + len(self.store.get_order_list())) + ':M'
 
         data = [
             {
                 "range": self.range_sizes,
                 "majorDimension": "ROWS",
-                "values": sizes
+                "values": values_sizes
             },
             {
-                "range": range_order_list,
+                "range": range_order,
                 "majorDimension": "ROWS",
-                "values": order_list
+                "values": values_order
             }]
 
         self.write(data)

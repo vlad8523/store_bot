@@ -14,5 +14,5 @@ customer = {'number_offer': '',
 
 order = {
     'customer': customer.copy(),
-    'items': []
+    'order_list': []
 }

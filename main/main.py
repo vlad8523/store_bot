@@ -92,19 +92,18 @@ def order(message, customer, order_list=[]):
     text = message.text
     # pprint(order_list)
     if text == '/end':
-        correct_order_list, non_correct = correct_order(store,order_list)
-        if len(non_correct) > 0:
-            bot.send_message(message.chat.id, 'Некорректные вещи:\n' +
-                             '\n'.join(non_correct))
-        bot.send_message(message.chat.id,'Недостаточное количество')
-        for item in correct_order_list:
-            if len(item['not_enough'])>0:
-                print(str(item['id_item'])+' '+' '.join(item['not_enough']))
-                bot.send_message(message.chat.id,str(item['id_item'])+' '+' '.join(item['not_enough']))
-
+        correct_order_list, non_correct,values_size,values_order = store.create_order(customer, order_list)
+        # if len(non_correct) > 0:
+        #     bot.send_message(message.chat.id, 'Некорректные вещи:\n' +
+        #                      '\n'.join(non_correct))
+        # bot.send_message(message.chat.id,'Недостаточное количество')
+        # for item in correct_order_list:
+        #     if len(item['not_enough'])>0:
+        #         print(str(item['id_item'])+' '+' '.join(item['not_enough']))
+        #         bot.send_message(message.chat.id,str(item['id_item'])+' '+' '.join(item['not_enough']))
+        sheet.write_order(values_size,values_order)
         # pprint(correct_order_list)
-
-        values = store.create_order(customer,order_list)
+        bot.send_message(message.chat.id,'Сделано')
         # sheet.write_order(values)
         return None
 
