@@ -1,7 +1,7 @@
 name_sizes = ['M', 'L', 'XL', '2XL', '3XL', '4XL']
 
 
-def correct_order(store, order_list):
+def create_correct_order(store, order_list):
     '''
     Создает корректный заказ
     Возращает лист с корректным заказом и некорректными элементами
@@ -40,7 +40,7 @@ def correct_order(store, order_list):
     for i in range(len(order_list)):
         # Временный id, некорректные размеры и лист для размеров вида [[size,counts],...,[size,counts]]
         tmp_id = order_list[i][0]
-
+        # 
         tmp_sizes_zip = [[size.upper(), counts] for size, counts in zip(order_list[i][1::2], order_list[i][2::2]) if
                          (size.upper() in name_sizes) and (counts.isdigit())]
         tmp_failed = [size.upper() for size, counts in zip(order_list[i][1::2], order_list[i][2::2]) if

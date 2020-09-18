@@ -68,7 +68,7 @@ def check(message):
 
 # Вывод подсказки по работе с функцией заказа
 @bot.message_handler(commands=['заказ'])
-def offer_help(message):
+def order_help(message):
     # bot.send_message(message.chat.id, 'Команда не рабочая')
     bot.send_message(message.chat.id, 'Введите данные покупателя:')
     bot.register_next_step_handler(message, order_customer)
@@ -92,12 +92,16 @@ def order(message, customer, order_list=[]):
     text = message.text
     # pprint(order_list)
     if text == '/end':
-        correct_order_list, non_correct,values_size,values_order = store.create_order(customer, order_list)
+        correct_order, non_correct,values_size,values_order = store.create_order(customer, order_list)
+        
+        # Придется переделывать create_order тк в случае удаления или изменения элементов необходимо изменять correct_order
+
+
         # if len(non_correct) > 0:
         #     bot.send_message(message.chat.id, 'Некорректные вещи:\n' +
         #                      '\n'.join(non_correct))
         # bot.send_message(message.chat.id,'Недостаточное количество')
-        # for item in correct_order_list:
+        # for item in correct_order:
         #     if len(item['not_enough'])>0:
         #         print(str(item['id_item'])+' '+' '.join(item['not_enough']))
         #         bot.send_message(message.chat.id,str(item['id_item'])+' '+' '.join(item['not_enough']))

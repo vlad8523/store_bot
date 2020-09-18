@@ -1,3 +1,5 @@
+import copy
+
 sizes = {
     'name_sizes': [],
     'counts': [],
@@ -12,7 +14,7 @@ customer = {'number_offer': '',
             'phone': '',
             'address': ''}
 
-order = {
-    'customer': customer.copy(),
+order_item = {
+    'customer': copy.deepcopy(customer),
     'order_list': []
 }

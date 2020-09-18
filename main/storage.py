@@ -7,6 +7,7 @@ from pprint import pprint
 class Storage:
     ___shared_state = {}
 
+    # Складской лист
     sizes_list = [[]]
     storage_list = [[]]
 
@@ -16,12 +17,17 @@ class Storage:
     sizes_dict = {name_sizes[i]:i for i in range(len(name_sizes))}
 
     def __init__(self):
+        # Необходимо для monostate
         self.__dict__ = self.___shared_state
 
     def set_storage(self, raw_storage):
         self.storage_list = create_storage(raw_storage)
+        self.set_sizes()
 
     def set_sizes(self):
+        '''
+        Вытаскивает все размеры из листа размеров
+        '''
         sizes_list = []
 
         for item in self.storage_list[1:]:
@@ -29,10 +35,17 @@ class Storage:
 
         self.sizes_list += sizes_list
 
+
     def set_order(self, raw_orders):
+        # Временное решение 
+        # Придумать парсинг всех заказов и разделение данных среди переменных
         self.order_list = raw_orders
 
     def update_sizes(self,order):
+        '''
+        Обновляет таблицу размеров согласно заказу
+        '''
+
         for item in order:
             id_item = item['id_item']
             sizes_zip = item['sizes']
@@ -46,6 +59,7 @@ class Storage:
 
             cur_values_size = [str(i) for i in cur_sizes]
 
+            # Обновление данных внутри storage
             self.sizes_list[id_item] = cur_values_size
             self.storage_list[id_item]['sizes'] = cur_values_size
 
@@ -54,7 +68,7 @@ class Storage:
 
     def get_sizes(self, data=[]):
 
-        sizes = templates.sizes.copy()
+        sizes = copy.deepcopy(templates.sizes)
         pprint(templates.sizes)
         if len(data) == 0:
             sizes['counts'] = self.sizes_list[1:]
@@ -98,8 +112,12 @@ class Storage:
         return self.order_list
 
     def create_order(self, customer, order_list):
-        order, non_correct = correct_order(self, order_list)
+        '''
+        Функция создания заказа
+        '''
+        order, non_correct = create_correct_order(self, order_list)
         self.update_sizes(order)
+        # Создание значений для вставки в таблицу
         values_order = create_values_order(customer, order)
         values_sizes = self.get_sizes()['counts']
 

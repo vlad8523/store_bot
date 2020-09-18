@@ -98,7 +98,7 @@ class GoogleSheet:
 
         '''
         range_order = 'МПродажи!B' + str(7 + len(self.store.get_order_list())) + ':M'
-
+        # Данные для создания запроса. Имеет два запроса для уменьшения нагрузки
         data = [
             {
                 "range": self.range_sizes,
@@ -117,8 +117,8 @@ class GoogleSheet:
         return None
 
     def set_store(self):
+
         storage_lists = self.get_store()
 
         self.store.set_storage(storage_lists[0]['values'])
-        self.store.set_sizes()
         self.store.set_order(storage_lists[1]['values'])
