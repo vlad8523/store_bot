@@ -1,6 +1,7 @@
 from transform_functions import *
 import templates
 from pprint import pprint
+import copy
 
 
 # Хранит в себе все значения из таблицы и производит манипуляции с данными
@@ -110,6 +111,11 @@ class Storage:
 
     def get_order_list(self):
         return self.order_list
+
+    def get_correct_order(self,order_list):
+        correct_order, non_correct = create_correct_order(self, order_list)
+
+        return correct_order, non_correct
 
     def create_order(self, customer, order_list):
         '''

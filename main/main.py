@@ -2,7 +2,7 @@
 
 import telebot
 import google_sheets
-from transform_functions import correct_order
+# from transform_functions import correct_order
 from pprint import pprint
 import storage
 import templates
@@ -105,8 +105,13 @@ def order(message, customer, order_list=[]):
         #     if len(item['not_enough'])>0:
         #         print(str(item['id_item'])+' '+' '.join(item['not_enough']))
         #         bot.send_message(message.chat.id,str(item['id_item'])+' '+' '.join(item['not_enough']))
+        
+        if (len(values_order) == 1):
+            bot.send_message(message.chat.id,'Не сделано')
+            return None
         sheet.write_order(values_size,values_order)
         # pprint(correct_order_list)
+
         bot.send_message(message.chat.id,'Сделано')
         # sheet.write_order(values)
         return None

@@ -40,27 +40,35 @@ def create_correct_order(store, order_list):
     for i in range(len(order_list)):
         # Временный id, некорректные размеры и лист для размеров вида [[size,counts],...,[size,counts]]
         tmp_id = order_list[i][0]
-        # 
+        # Связанные элементы размера и количество покупаемых вещей
         tmp_sizes_zip = [[size.upper(), counts] for size, counts in zip(order_list[i][1::2], order_list[i][2::2]) if
                          (size.upper() in name_sizes) and (counts.isdigit())]
+        # Те вещи, которые не вошли в список выше
         tmp_failed = [size.upper() for size, counts in zip(order_list[i][1::2], order_list[i][2::2]) if
                       (size.upper() not in name_sizes) or (not counts.isdigit())]
+
+        # Списки для размеров и количества
         tmp_sizes = [size for size, counts in tmp_sizes_zip]
         tmp_counts = [counts for size, counts in tmp_sizes_zip]
 
+        # Список для вещей, где недостаточное количество
         tmp_not_enough = []
-        data = [tmp_id]+tmp_sizes
 
+        # Данные для получения размеров
+        data = [tmp_id]+tmp_sizes
         curr_counts = store.get_sizes(data)['counts']
 
+        # Список хранящий условия превышает ли количество покупаемых вещей с количеством на складе
         cond_counts = [correct_counts_fun(x,y) for x,y in zip(tmp_counts,curr_counts)]
 
+        # Составление списка с недостаточным количеством и удаление этих элементов
         for j in range(len(tmp_sizes_zip))[::-1]:
             if not cond_counts[j]:
                 del tmp_sizes_zip[j]
                 tmp_not_enough.append(tmp_sizes.pop(j))
-        # Корректный список заказов(хранит в себе все вещи в виде словаря с id, размерами и некорректными размерами)
+        
 
+        # Корректный список заказов(хранит в себе все вещи в виде словаря с id, размерами и некорректными размерами)
         correct_order.append({
             'id_item': tmp_id,
             'sizes': tmp_sizes_zip,
