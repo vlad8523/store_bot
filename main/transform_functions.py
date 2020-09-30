@@ -1,5 +1,66 @@
+import copy
+import templates
+
 name_sizes = ['M', 'L', 'XL', '2XL', '3XL', '4XL']
 
+def tmp_create_correct_order(store,order_list):
+    non_correct_items = []
+    correct_order = copy.deepcopy(templates.order)
+
+    for order_item in order_list:
+        if len(order_item) <= 1:
+            continue
+
+        tmp_id = order_item[0]
+
+        if tmp_id.is_digit():
+            tmp_id = int(tmp_id)
+        else:
+            non_correct_items.append(tmp_id)
+            continue
+
+        if len(order_item)%2!=1:
+            non_correct_items.append(tmp_id)
+
+        if tmp_id not in correct_order:
+            correct_order['list_IDs'].append(tmp_id)
+            correct_order['dict_order'][tmp_id] = copy.deepcopy(templates.ID_order_item)
+
+        for size,count in zip(order_item[1::2],order_item[2::2]):
+            if not(size.isalpha() and count.isdigit()):
+                correct_order['dict_order'][tmp_id]['failed'].append(size)
+                continue
+
+            if size.upper() in templates.name_sizes:
+                correct_order['dict_order'][tmp_id]['sizes'][size.upper()] = int(counts)
+
+    for i in range(len(order_list))[::-1]:
+        # Проверка на id вещи
+        if order_list[i][0].isdigit():
+            tmp_id = int(order_list[i][0])
+
+            order_list[i] = [tmp_id] + order_list[i][1:]
+            # Проверка на вид заказа id,(размер,количество)*
+
+            if len(order_list[i]) % 2 != 1:
+                non_correct_items.append(order_list.pop(i))
+
+            data = [str(tmp_id)]
+
+            current_counts = store.get_sizes(data)
+
+            if current_counts['error_code'] != 0:
+                non_correct_items.append(order_list.pop(i))
+
+        else:
+            non_correct_items.append(order_list.pop(i))
+
+    for order_item in order_list:
+        # Временный id, некорректные размеры и лист для размеров вида [[size,counts],...,[size,counts]]
+        tmp_id = order_item[0]
+
+        for i in range(len(order_item))[1:]:
+            if
 
 def create_correct_order(store, order_list):
     '''
@@ -35,7 +96,7 @@ def create_correct_order(store, order_list):
         else:
             non_correct_items.append(order_list.pop(i))
 
-    correct_counts_fun = lambda x,y: int(x)<=int(y)
+    correct_counts_fun = lambda x, y: int(x) <= int(y)
 
     for i in range(len(order_list)):
         # Временный id, некорректные размеры и лист для размеров вида [[size,counts],...,[size,counts]]
@@ -55,18 +116,17 @@ def create_correct_order(store, order_list):
         tmp_not_enough = []
 
         # Данные для получения размеров
-        data = [tmp_id]+tmp_sizes
+        data = [tmp_id] + tmp_sizes
         curr_counts = store.get_sizes(data)['counts']
 
         # Список хранящий условия превышает ли количество покупаемых вещей с количеством на складе
-        cond_counts = [correct_counts_fun(x,y) for x,y in zip(tmp_counts,curr_counts)]
+        cond_counts = [correct_counts_fun(x, y) for x, y in zip(tmp_counts, curr_counts)]
 
         # Составление списка с недостаточным количеством и удаление этих элементов
         for j in range(len(tmp_sizes_zip))[::-1]:
             if not cond_counts[j]:
                 del tmp_sizes_zip[j]
                 tmp_not_enough.append(tmp_sizes.pop(j))
-        
 
         # Корректный список заказов(хранит в себе все вещи в виде словаря с id, размерами и некорректными размерами)
         correct_order.append({

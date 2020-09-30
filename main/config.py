@@ -1,6 +1,6 @@
 from telebot import *
 import google_sheets
-
+import storage
 
 # Пользователи с разрешенным доступом
 known_users = []
@@ -13,7 +13,7 @@ token_sheet = '1x5ZVTBTggSjEHWW4SpW_V9ROsRS8Ik_9zwnMNseVQwc'
 new_token_sheet = '1Dj37PyQP2_1lAfGgwDYWs4_If84qbEbikT9QGBXkf8k'
 credentials = 'sheets.json'  # имя файла с закрытым ключом
 # Бот для телеграм
-bot = telebot.TeleBot(token_telegram)
+bot = TeleBot(token_telegram)
 # Связь с Google 
 sheet = google_sheets.GoogleSheet(token_sheet, credentials)
 sheet.set_store()

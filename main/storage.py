@@ -67,7 +67,9 @@ class Storage:
     def get_storage(self):
         return self.storage_list
 
-    def get_sizes(self, data=[]):
+    def get_sizes(self, data=None):
+        if data is None:
+            data = []
 
         sizes = copy.deepcopy(templates.sizes)
         pprint(templates.sizes)

@@ -1,5 +1,7 @@
 from config import *
 import transform_functions as tf
+import templates
+
 
 correct_order = []
 customer = []
@@ -33,7 +35,7 @@ def order(message, customer, order_list=[]):
     if text == '/end':
         correct_order, non_correct = store.get_correct_order(order_list)
         
-        # Придется переделывать create_order тк в случае удаления или изменения элементов необходимо изменять correct_order
+
 
 
         # if len(non_correct) > 0:
@@ -45,10 +47,8 @@ def order(message, customer, order_list=[]):
         #         print(str(item['id_item'])+' '+' '.join(item['not_enough']))
         #         bot.send_message(message.chat.id,str(item['id_item'])+' '+' '.join(item['not_enough']))
         
-        if (len(values_order) == 1):
-            bot.send_message(message.chat.id,'Не сделано')
-            return None
-        sheet.write_order(values_size,values_order)
+
+
         # pprint(correct_order_list)
 
         bot.send_message(message.chat.id,'Сделано')
@@ -63,19 +63,27 @@ def order(message, customer, order_list=[]):
 
 @bot.callback_query_handler(lambda call: call.data == 'change_order')
 def call_change_order(call):
-    
+    pass
 
 
 @bot.callback_query_handler(lambda call: call.data.split('_')[0]=='order')
 def call_order(call):
     command = call.data.split('_')[1]
     if command == 'apply':
-        values_order = tf.create_values_order(customer, correcr_order)
+        values_order = tf.create_values_order(customer, correct_order)
         values_sizes = store.get_sizes()['counts']
-        sheet.write_order(values_size,values_order)
+        sheet.write_order(values_sizes,values_order)
         bot.send_message(call.message.chat.id,"Сделан")
         return None
 
     if command == 'cancel':
+        values_order = []
+        values_sizes = []
+        correct_order = []
+        customer = {}
+        return None
 
 
+def clear_inline_buttons(chat_id,message_id):
+    keyboard_del = types.InlineKeyboardMarkup()
+    bot.edit_message_reply_markup(chat_id,message_id,keyboard_del)
